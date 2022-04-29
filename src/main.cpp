@@ -36,7 +36,7 @@ public:
 
       cfg.panel_width = 240;
       cfg.panel_height = 240;
-      cfg.invert           = false;
+      cfg.invert = false;
       // cfg.rgb_order        = false;
       // cfg.dlen_16bit       = false;
       cfg.bus_shared = false;
@@ -78,7 +78,6 @@ void init_star(STAR *star, int zpos)
   star->speed = 2 + (int)(2.0 * (rand() / (RAND_MAX + 1.0)));
 }
 
-
 void setup(void)
 {
   lcd.init();
@@ -93,7 +92,7 @@ void setup(void)
 
   for (int i = 0; i < NUMBER_OF_STARS; ++i)
   {
-    init_star(stars + i, 1+ rand() % 3000);
+    init_star(stars + i, 1 + rand() % 3000);
   }
 
   for (std::uint32_t i = 0; i < 2; ++i)
@@ -148,8 +147,6 @@ void loop(void)
     buffer[flip].writePixel(tempx, tempy + 1, col);
   }
 
-  // посылаем буфер на отрисовку
-  // (двойная буферизация собственно)
   buffer[flip].pushSprite(&lcd, 0, 0);
 
   // lcd.display();
