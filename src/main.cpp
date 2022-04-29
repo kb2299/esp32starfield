@@ -149,7 +149,6 @@ void loop(void)
   }
 
   // посылаем буфер на отрисовку
-  // (двойная буферизация собственно)
   buffer[flip].pushSprite(&lcd, 0, 0);
 
   // lcd.display();
