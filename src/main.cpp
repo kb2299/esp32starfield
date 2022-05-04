@@ -147,6 +147,7 @@ void loop(void)
     buffer[flip].writePixel(tempx, tempy + 1, col);
   }
 
+  // посылаем буфер на отрисовку
   buffer[flip].pushSprite(&lcd, 0, 0);
 
   // lcd.display();
