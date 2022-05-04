@@ -49,14 +49,14 @@ public:
 
 static LGFX lcd;
 
-static std::int32_t lcd_width;
-static std::int32_t lcd_height;
+static int32_t lcd_width;
+static int32_t lcd_height;
 
 static LGFX_Sprite buffer[2];
 
 #define NUMBER_OF_STARS 2000
 
-static std::uint16_t centerx, centery;
+static uint16_t centerx, centery;
 
 typedef struct
 {
@@ -77,8 +77,9 @@ void init_star(STAR *star, int zpos)
   star->zpos = zpos;
   star->speed = 2 + (int)(2.0 * (rand() / (RAND_MAX + 1.0)));
 }
-uint16_t pal[256];
-RGBColor *cols;
+
+// uint16_t pal[256];
+// RGBColor *cols;
 void setup(void)
 {
   Serial.begin(115200);
@@ -92,26 +93,21 @@ void setup(void)
   centerx = lcd_width / 2;
   centery = lcd_width / 2;
 
-  for (int i = 0; i < NUMBER_OF_STARS; ++i)
+  for (uint8_t i = 0; i < NUMBER_OF_STARS; ++i)
   {
     init_star(stars + i, 1 + rand() % 2000);
   }
 
-  for (std::uint32_t i = 0; i < 2; ++i)
+  for (uint8_t i = 0; i < 2; ++i)
   {
     buffer[i].setColorDepth(8);
     buffer[i].createSprite(lcd_width, lcd_height);
-    buffer[i].createPalette(pal,256);
     buffer[i].setPaletteGrayscale();
-    // for (int i = 0; i < 255; i++)
-    // {
-    //   buffer[i].setPalette(i,lcd.color888(i,i,i));
-    // }
   }
-  cols = buffer[0].getPalette();
-  Serial.printf("Palete size = %d\r\n", sizeof(cols));
-  Serial.println("!!!");
-  Serial.println("!!!");
+  // cols = buffer[0].getPalette();
+  // Serial.printf("Palete size = %d\r\n", sizeof(cols));
+  // Serial.println("!!!");
+  // Serial.println("!!!");
 
   lcd.startWrite();
 }
@@ -132,9 +128,8 @@ void loop(void)
   {
     stars[i].zpos -= stars[i].speed;
 
-    int u = 100- 100 * (stars[i].zpos / 2000);
+    int u = 255 - 255 * (stars[i].zpos / 2000);
     col = buffer[flip].color888(u, u, u);
-    // col = u;
 
     if (stars[i].zpos <= 0)
     {
@@ -150,16 +145,17 @@ void loop(void)
       continue;
     }
 
-    //buffer[flip].setColor(col);
+    // buffer[flip].setColor(col);
     for (int i = 0; i < 3; i++)
     {
-      buffer[flip].writeFastHLine(tempx, tempy+i,3,buffer[flip].color888(u, u, u));
+      buffer[flip].writeFastHLine(tempx, tempy + i, 3, col);
     }
     // buffer[flip].writePixel(tempx, tempy);
     // buffer[flip].writePixel(tempx + 1, tempy);
     // buffer[flip].writePixel(tempx + 1, tempy + 1);
     // buffer[flip].writePixel(tempx, tempy + 1);
   }
+
   // for (int i = 0; i < 255; i++)
   // {
   //   buffer[flip].writeFastVLine(i, 100, 10, buffer[flip].color888(i, i, i));
@@ -167,10 +163,6 @@ void loop(void)
   //   buffer[flip].writeFastVLine(i, 120, 10, lcd.color888(i, i, i));
   // }
 
-
-
   // посылаем буфер на отрисовку
   buffer[flip].pushSprite(&lcd, 0, 0);
-
-  // lcd.display();
 }
